@@ -37,6 +37,7 @@ public class Weapon : MonoBehaviour
             {
                 currentPorjectileDuration = 0;
                 firing = false;
+                anim.SetBool("Firing", false);
             }
         }
 
