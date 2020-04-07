@@ -8,6 +8,7 @@ public class Weapon : MonoBehaviour
     public int numProjToBeShot;
     public float timeBetweenShots;
     public bool isPickable = true;
+    public string description;
 
     int remainingShots;
     Vector3 shootDir;

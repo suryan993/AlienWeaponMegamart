@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 8414448243553306765}
   - component: {fileID: -8721794300697773852}
   m_Layer: 0
-  m_Name: Projectile
+  m_Name: Projectile2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -30,7 +30,7 @@ Transform:
   m_GameObject: {fileID: 4635675804966781391}
   m_LocalRotation: {x: 0, y: 0, z: -0.7071068, w: 0.7071068}
   m_LocalPosition: {x: 1.177964, y: -5.924526, z: 10}
-  m_LocalScale: {x: 10, y: 10, z: 0}
+  m_LocalScale: {x: 5, y: 5, z: 0}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -94,7 +94,7 @@ Animator:
   m_GameObject: {fileID: 4635675804966781391}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 1c6332cb61a3c394fb41b73e3a398e94, type: 2}
+  m_Controller: {fileID: 9100000, guid: ab162906b6e250e4bbaca7d10eb54a3c, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -120,7 +120,10 @@ MonoBehaviour:
   lifeTime: 5
   speed: 15
   acceleration: 2
+  explosionLifetime: 1
   firedDirection: {x: 0, y: 0, z: 0}
+  minDamage: 20
+  maxDamage: 50
 --- !u!61 &8414448243553306765
 BoxCollider2D:
   m_ObjectHideFlags: 0
