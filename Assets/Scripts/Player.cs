@@ -10,6 +10,9 @@ public class Player : MonoBehaviour
     bool holdingWeapon;
     GameObject currWeapon;
     GameObject prevWeapon;
+    public GameObject shopText1;
+    public GameObject shopText2;
+
 
     Transform mTransform;
     void Start()
@@ -62,6 +65,7 @@ public class Player : MonoBehaviour
         //Debug.Log("Trigger enter " + collision.gameObject.tag);
         if (collision.gameObject.tag.Equals("Weapon"))  //get bread, reduce cleanliness
         {
+            shopText2.GetComponent<TextMesh>().text = "Target dummies are in the back";
             if (!collision.gameObject.GetComponent<Weapon>().isPickable)
                 return;
 
@@ -77,6 +81,8 @@ public class Player : MonoBehaviour
             currWeapon = collision.gameObject;
 
             currWeapon.GetComponent<BoxCollider2D>().enabled = false;
+
+            shopText1.GetComponent<TextMesh>().text = currWeapon.GetComponent<Weapon>().description;
             //gameObject.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = collision.gameObject.GetComponent<SpriteRenderer>().sprite;
         }
     }
