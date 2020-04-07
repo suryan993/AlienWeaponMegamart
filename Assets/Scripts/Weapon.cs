@@ -5,49 +5,48 @@ using UnityEngine;
 public class Weapon : MonoBehaviour
 {
     public GameObject projectile;
-    bool firing = false;
-    Animator anim;
-    public float maxProjectileDuration = 2.0f;
-    float currentPorjectileDuration = 0.0f;
+    public int numProjToBeShot;
+    public float timeBetweenShots;
+    public bool isPickable = true;
+
+    int remainingShots;
+    Vector3 shootDir;
     // Start is called before the first frame update
     void Start()
     {
-        Vector3 temp = transform.position;
-        projectile.transform.position = temp;
-        anim = projectile.GetComponent<Animator>();
 
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (!firing)
-        {
-            Vector3 temp = transform.position;
-            projectile.transform.position = temp;
-        } else
-        {
-            if (currentPorjectileDuration < maxProjectileDuration)
-            {
-                currentPorjectileDuration += Time.deltaTime;
-                Vector3 temp = projectile.transform.position;
-                temp.x += 0.1f;
-                projectile.transform.position = temp;
-            } else
-            {
-                currentPorjectileDuration = 0;
-                firing = false;
-                anim.SetBool("Firing", false);
-            }
-        }
 
-        if (Input.GetKeyDown(KeyCode.Space))
+    }
+
+    public void Fire(Vector3 targetDir)
+    {
+        shootDir = targetDir;
+        remainingShots = numProjToBeShot;
+        Shoot();
+    }
+
+    void Shoot()
+    {
+        GameObject proj = Instantiate(projectile, transform.position, transform.rotation);
+        proj.GetComponent<Projectile>().firedDirection = shootDir;
+        remainingShots--;
+        if(remainingShots > 0)
         {
-            if (!firing)
-            {
-                firing = true;
-                anim.SetBool("Firing", true);
-            }
+            Invoke("Shoot", timeBetweenShots);
+        }
+    }
+
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        if (collision.gameObject.tag.Equals("Player"))
+        {
+            isPickable = true;
+            GetComponent<BoxCollider2D>().enabled = true;
         }
     }
 }
