@@ -9,6 +9,7 @@ public class Weapon : MonoBehaviour
     public float timeBetweenShots;
     public bool isPickable = true;
     public string description;
+    bool shooting = false;
 
     int remainingShots;
     Vector3 shootDir;
@@ -26,9 +27,14 @@ public class Weapon : MonoBehaviour
 
     public void Fire(Vector3 targetDir)
     {
-        shootDir = targetDir;
-        remainingShots = numProjToBeShot;
-        Shoot();
+        if (!shooting)
+        {
+            shooting = true;
+            //shootDir = targetDir;
+            shootDir = GetNormalizedDirectionToMouse();
+            remainingShots = numProjToBeShot;
+            Shoot();
+        }
     }
 
     void Shoot()
@@ -40,6 +46,13 @@ public class Weapon : MonoBehaviour
         {
             Invoke("Shoot", timeBetweenShots);
         }
+
+        Invoke("disableShooting", timeBetweenShots*numProjToBeShot*2);
+    }
+
+    private void disableShooting()
+    {
+        shooting = false;
     }
 
     private void OnCollisionExit2D(Collision2D collision)
@@ -49,5 +62,16 @@ public class Weapon : MonoBehaviour
             isPickable = true;
             GetComponent<BoxCollider2D>().enabled = true;
         }
+    }
+
+    public Vector3 GetNormalizedDirectionToMouse()
+    {
+        Vector3 viewPortActual, viewPortDelta, directionToMouse;
+
+        // Calculate a direction based on the Mouse Position (using Viewport)
+        viewPortActual = Camera.main.ScreenToViewportPoint(Input.mousePosition);
+        viewPortDelta = new Vector3(0.5f, 0.5f, 0); // Detract Half the screen
+        directionToMouse = viewPortActual - viewPortDelta; // Caculate Direction
+        return directionToMouse.normalized; // Return normalized Direction
     }
 }

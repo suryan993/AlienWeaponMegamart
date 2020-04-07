@@ -21,6 +21,9 @@ public class Projectile : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        Vector3 mouseDir = GetNormalizedDirectionToMouse();
+        //transform.rotation = Quaternion.LookRotation(Vector3.forward, mouseDir);
+        firedDirection = mouseDir;
         velocity = speed * firedDirection;
         anim = GetComponent<Animator>();
         anim.SetBool("Firing", true);
@@ -48,13 +51,23 @@ public class Projectile : MonoBehaviour
         }
     }
 
+    public Vector3 GetNormalizedDirectionToMouse()
+    {
+        Vector3 viewPortActual, viewPortDelta, directionToMouse;
+
+        // Calculate a direction based on the Mouse Position (using Viewport)
+        viewPortActual = Camera.main.ScreenToViewportPoint(Input.mousePosition);
+        viewPortDelta = new Vector3(0.5f, 0.5f, 0); // Detract Half the screen
+        directionToMouse = viewPortActual - viewPortDelta; // Caculate Direction
+        return directionToMouse.normalized; // Return normalized Direction
+    }
+
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
         Debug.Log("Projectile Trigger enter " + collision.gameObject.tag);
         if (collision.gameObject.tag.Equals("targetExplode"))
         {
-            Debug.Log("Entering Player");
             anim.SetBool("Hit", true);
             hit = true;
             Destroy(gameObject, explosionLifetime);
