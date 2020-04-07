@@ -12,12 +12,14 @@ public class Player : MonoBehaviour
     GameObject prevWeapon;
     public GameObject shopText1;
     public GameObject shopText2;
+    Animator anim;
 
 
     Transform mTransform;
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        anim = gameObject.GetComponent<Animator>(); ;
     }
 
     // Update is called once per frame
@@ -31,19 +33,22 @@ public class Player : MonoBehaviour
         force *= moveForce;
         //Debug.Log(transform.position.y + moveY);
         Vector3 mouseDir = GetNormalizedDirectionToMouse();
-        transform.rotation = Quaternion.LookRotation(Vector3.forward, mouseDir);
+        //transform.rotation = Quaternion.LookRotation(Vector3.forward, mouseDir);
 
         rb.AddForce(force);
 
         if (holdingWeapon)
         {
             currWeapon.transform.position = transform.position;
-            currWeapon.transform.rotation = transform.rotation;
+            currWeapon.transform.rotation = Quaternion.LookRotation(Vector3.forward, mouseDir);
         }
 
         if(Input.GetMouseButtonDown(0))// If left button is pressed
         {
-            currWeapon.GetComponent<Weapon>().Fire(mouseDir);
+            if (holdingWeapon)
+            {
+                currWeapon.GetComponent<Weapon>().Fire(mouseDir);
+            }
         }
     }
 
@@ -65,6 +70,7 @@ public class Player : MonoBehaviour
         //Debug.Log("Trigger enter " + collision.gameObject.tag);
         if (collision.gameObject.tag.Equals("Weapon"))  //get bread, reduce cleanliness
         {
+            anim.SetBool("WeaponPicked", true);
             shopText2.GetComponent<TextMesh>().text = "Target dummies are in the back";
             if (!collision.gameObject.GetComponent<Weapon>().isPickable)
                 return;
